@@ -99,12 +99,24 @@ class Trainer:
         """Setup data loaders"""
         self.logger.info("Setting up data loaders...")
 
-        train_files = [
-            os.path.join(self.config['data']['data_dir'], f"train_{i:02d}.npz")
-            for i in range(self.config['data']['num_train_files'])
-        ]
+        # Expand environment variables in data_dir
+        data_dir = os.path.expandvars(self.config['data']['data_dir'])
 
-        val_file = os.path.join(self.config['data']['data_dir'], "val_00.npz")
+        # Find all .npz files in the directory
+        all_files = [f for f in os.listdir(data_dir) if f.endswith('.npz')]
+        all_files.sort()  # Sort to ensure consistent ordering
+
+        if len(all_files) < 2:
+            raise ValueError(f"Need at least 2 .npz files, found {len(all_files)}")
+
+        # Use all files except the last one for training
+        train_files = [os.path.join(data_dir, f) for f in all_files[:-1]]
+        # Use the last file for validation
+        val_file = os.path.join(data_dir, all_files[-1])
+
+        self.logger.info(f"Found {len(all_files)} files total")
+        self.logger.info(f"Using {len(train_files)} files for training")
+        self.logger.info(f"Using 1 file for validation: {os.path.basename(val_file)}")
 
         self.train_loader, self.val_loader = create_train_val_dataloaders(
             train_files=train_files,

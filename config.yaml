@@ -8,7 +8,6 @@ model:
 
 data:
   data_dir: "$HOME/temperature_sr_project/data"
-  num_train_files: 33
   scale_factor: 0.001  # Temperature scale factor
   colormap: "turbo"
   patch_size: 128  # Not used when patch_height/width are specified
