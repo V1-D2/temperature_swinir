@@ -2,12 +2,12 @@
 name: "temperature_swinir_x2"
 
 model:
-  pretrained_path: "/path/to/001_classicalSR_DIV2K_s48w8_SwinIR-M_x2.pth"
+  pretrained_path: "/home/vdidur/temperature_swinir/pretrained/001_classicalSR_DIV2K_s48w8_SwinIR-M_x2.pth"
   scale_factor: 2
-  freeze_backbone: false  # Set to true to only train adapters
+  freeze_backbone: True # Set to true to only train adapters
 
 data:
-  data_dir: "/pscratch/sd/s/stodi/climate-new/sample_chirps"
+  data_dir: "$HOME/temperature_sr_project/data"
   num_train_files: 33
   scale_factor: 0.001  # Temperature scale factor
   colormap: "turbo"
@@ -20,12 +20,12 @@ training:
   batch_size: 4
   lr: 0.0002
   lr_min: 0.000001
-  weight_decay: 0.01
+  weight_decay: 0.0001
   grad_clip: 1.0
 
   save_dir: "./experiments"
-  save_interval: 10
-  log_interval: 50
+  save_interval: 50
+  log_interval: 10
   num_val_images: 5
 
   resume: null  # Path to checkpoint to resume from
